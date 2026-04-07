@@ -43,9 +43,23 @@ $("#about").on("mouseover", function () {
     introAboutLogoTransition();
 });
 
-$("input").on("change", function () {
+$("input[type='checkbox']").on("change", function () {
     $("body").toggleClass("blue");
 });
+
+const destinationSearch = document.getElementById("destination-search");
+
+function filterDestinations() {
+    const query = destinationSearch.value.trim().toLowerCase();
+    document.querySelectorAll(".events .card").forEach((card) => {
+        const matches = card.innerText.toLowerCase().includes(query);
+        card.style.display = matches ? "flex" : "none";
+    });
+}
+
+if (destinationSearch) {
+    destinationSearch.addEventListener("input", filterDestinations);
+}
 
 // Light/Dark toggle
 const checkbox = document.getElementById("checkbox");
@@ -96,55 +110,38 @@ function topFunction() {
     document.documentElement.scrollTop = 0;
 }
 
+// Rotate the header quote for a fresh travel message
+const headerQuotes = [
+    "Explore the colourful World",
+    "Pack your bag for the next adventure",
+    "Discover hidden places and unforgettable journeys",
+    "Travel far, collect stories, and return inspired",
+];
+let quoteIndex = 0;
+const quoteElement = document.getElementById("quote");
+
+function rotateHeaderQuote() {
+    if (!quoteElement) return;
+    quoteElement.textContent = headerQuotes[quoteIndex];
+    quoteIndex = (quoteIndex + 1) % headerQuotes.length;
+}
+
+rotateHeaderQuote();
+setInterval(rotateHeaderQuote, 4000);
+
 // Update Navbar While Scrolling
 function updateNav() {
     const sections = document.querySelectorAll("section");
     const navLinks = document.querySelectorAll(".nav-links li a");
+    const screenWidth = window.screen.width;
+    const threshold = screenWidth <= 425 ? 1300 : screenWidth <= 768 ? 1250 : 1000;
 
     sections.forEach((section, index) => {
         const rect = section.getBoundingClientRect();
 
-        if (window.screen.width <= 425) {
-            if (rect.top <= 1300) {
-                navLinks.forEach((navLink) => {
-                    navLink.classList.remove("active");
-                });
-                navLinks[index].classList.add("active");
-            }
-        } else if (425 <= window.screen.width <= 768) {
-            if (rect.top <= 1250) {
-                navLinks.forEach((navLink) => {
-                    navLink.classList.remove("active");
-                });
-                navLinks[index].classList.add("active");
-            }
-        } else {
-            if (rect.top <= 1000) {
-                navLinks.forEach((navLink) => {
-                    navLink.classList.remove("active");
-                });
-                navLinks[index].classList.add("active");
-            }
-        }
-    });
-}
-else {
-            if (rect.top <= 1000) {
-                navLinks.forEach((navLink) => {
-                    navLink.classList.remove("active");
-                });
-                navLinks[index].classList.add("active");
-            }
-        }
-    });
-}
-else {
-            if (rect.top <= 1000) {
-                navLinks.forEach((navLink) => {
-                    navLink.classList.remove("active");
-                });
-                navLinks[index].classList.add("active");
-            }
+        if (rect.top <= threshold) {
+            navLinks.forEach((navLink) => navLink.classList.remove("active"));
+            navLinks[index].classList.add("active");
         }
     });
 }
