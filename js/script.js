@@ -138,6 +138,15 @@ else {
         }
     });
 }
-
+else {
+            if (rect.top <= 1000) {
+                navLinks.forEach((navLink) => {
+                    navLink.classList.remove("active");
+                });
+                navLinks[index].classList.add("active");
+            }
+        }
+    });
+}
 
 window.addEventListener("scroll", updateNav);
